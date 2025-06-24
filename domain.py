@@ -15,7 +15,7 @@ utest_significance = 0
 resolution = 5000
 domain_limit = 50000
 max_iteration = 0
-scale_dist = []
+scale_dist = [4]
 
 if pair_merge:
     os.system("mkdir " + parent_dir + "topohic/merge/")

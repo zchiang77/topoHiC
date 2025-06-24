@@ -11,14 +11,10 @@ parent_dir = ""
 exp_list = []
 weight_col = ""
 chrom_list = []
-score_threshold = 0
-utest_significance = 0
 resolution = 0
-domain_limit = 0
 edge_limit_bp = 0
-max_iteration = 0
 
-scale_dist = []
+scale_dist = [4]
 compute_end_perc = "25%"
 compute_end_perc_dist = 50
 scale_perc = "75%"
@@ -65,7 +61,7 @@ for exp_name in exp_list:
             os.system("mkdir " + directory_for_ph)
             cyc_file = compute_PH.compute_ph(edge_output, exp_name, directory_for_ph, filetype,
                                              dim, begin_thresh, threads, end_thresh, sc)
-            get_score.get_score(exp_name, directory_for_ph, score_threshold, bin_range, resolution)
+            get_score.get_score(exp_name, directory_for_ph, bin_range, resolution)
 
     end_time = time.time()
 

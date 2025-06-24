@@ -14,8 +14,28 @@ TopoHiC takes Hi-C files in `.cool` format as input. We recommend use Hi-C files
 
 After the preparation of Hi-C files, you need to modify the parameter settings in `main.py`.
 
-- `parant_dir` is the directory that contains your Hi-C, for example, `hicfiles/`
+- `parent_dir` is the directory that contains your Hi-C, for example, `hicfiles/`
 - `exp_list` is a list of NAME of your Hi-C files, for example, `['replicate1', 'replicate2']`
 - `weight_col` is the name of the column that stores the weighted or raw contact frequencies which you want to use. If you use `cooler balance` to perform normalization with default parameters, then you need to set this to `'weight'`. In other cases, `'KR'`, `'VC'`, etc are all available.
 - `chrom_list` is a list of all the names of chromosomes you want to calculate, for example, `['chr1', 'chr2']` or `['1', '2']`. Note that it must be consistent with the chromosome names in your Hi-C files.
+- `resolution` is the resolution of your Hi-C files, such as `5000`
+- `edge_limit_bp` is the maximum distance in the 3D point cloud. Points that are separated by a distance exceeding this limit are regarded as being infinitely distant from each other. You can set this value to `-1` in order to consider all distances.
+
+We advise against modifying other parameters unless you possess a comprehensive understanding of persistent homology.
+
+## Calculate loop scores
+
+Use command `python main.py` in order to calculate loop scores for each Hi-C file. The results will be stored by default under `parent_dir/topohic` directory.
+
+## Find TADs
+
+First, modify the parameter settings, including `parent_dir`, `exp_list`, `chrom_list` and `resolution`, in `domain.py` similar to `main.py`. The parameter `domain_limit` is set to be 50000 by default which means that candidate TADs whose sizes are below 50kb will be filtered out.
+
+By default, `pair_merge` is set to be `True` which means topoHiC will find TADs using the merged approach, in which case the `score_threshold` is set to be 0.5. However, if you want to implement topoHiC using the individual approach, you need to change `pair_merge` to `False` and `score_threshold` to 0.
+
+In merged approach, the resulting TADs will be stored under `parent_dir/topohic/merge` directory. Otherwise, they will be stored under separate directories.
+
+## Help
+
+If you need any help, feel free to contact zhenchiang@sjtu.edu.cn.
 
