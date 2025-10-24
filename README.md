@@ -35,6 +35,12 @@ By default, `pair_merge` is set to be `True` which means topoHiC will find TADs 
 
 In merged approach, the resulting TADs will be stored under `parent_dir/topohic/merge` directory. Otherwise, they will be stored under separate directories.
 
+## Example
+
+You can find example scripts under the `example` folder. The example .cool files as well as the result files are too big to upload.
+
+If you have any questions using these scripts, please feel free to contact us (zhenchiang@sjtu.edu.cn) at any time.
+
 ## Help
 
 If you need any help, feel free to contact zhenchiang@sjtu.edu.cn.
