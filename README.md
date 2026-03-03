@@ -2,9 +2,25 @@ TopoHiC is a computational tool for Hi-C analysis. It enables simultaneous ident
 
 ## Download
 
-First, you need to install `pydory` package, which enables high efficient computation of H1 loops in very large datasets. Use `pip install pydory` to install. If you need further assistance with the installation of `pydory`, please refer to [this page](https://github.com/nihcompmed/Dory). Note that it requires gcc-10.2 with openMP support. We recommend that you create a virtual environment prior to installation to avoid potential version conflicts.
+First, you need to install `pydory` package, which enables high efficient computation of H1 loops in very large datasets. Use `pip install pydory` to install. If you need further assistance with the installation of `pydory`, please refer to [Dory](https://github.com/nihcompmed/Dory). Note that it requires gcc-10.2 with openMP support. We recommend that you create a virtual environment prior to installation to avoid potential version conflicts.
 
-After that, download all the python scripts in our repository to the same directory. 
+Then, the following software packages are required:
+
+- python = 3.12.2
+- cooler = 0.10.3
+- numpy = 1.26.4
+- pandas = 2.2.1
+- h5py = 3.13.0
+- matplotlib = 3.9.1
+- networkx = 3.4.2
+- pydot = 1.4.2
+- sklearn = 1.3.2
+- scipy = 1.14.0
+- numba = 0.59.1
+
+This pipeline also requires the import of the following packages: `pickle`, `itertools`, `copy`, `gc`, `collections`, `math`, `subprocess`. These packages are part of the standard Python library and require no additional installation.
+
+To get started, download all the python scripts in our repository to the same directory. 
 
 ## Data preparation
 
@@ -37,7 +53,42 @@ In merged approach, the resulting TADs will be stored under `parent_dir/topohic/
 
 ## Example
 
-You can find example scripts under the `example` folder. The example .cool files as well as the result files are too big to upload.
+In the following steps, we will walk you through downloading and processing the example dataset from the GEO database.
+
+- **Step1:** Download the folder named `example`​ to local. Then copy all the scripts you have just downloaded into the `example/topohic/​` directory, placing them together with `run1.py`​ and `domain.py`.
+- **Step2:** Click this link [GSM1551569](https://www.ncbi.nlm.nih.gov/geo/download/?acc=GSM1551569&format=file&file=GSM1551569%5FHIC020%2Ehic) to download the file with the .hic suffix to your local device. This is the biological replicate 1 in Dataset1 in our paper. You may rename it to `rep1.hic` for convenience. Then, install [HiCExplorer](https://github.com/deeptools/HiCExplorer). Run `hicConvertFormat` command to convert the `.hic` format to `.cool`. For example,
+```
+hicConvertFormat -m rep1.hic -o rep1.cool --inputFormat hic --outputFormat cool -r 5000
+```
+The output file should be named as `rep1_5000.cool`. You can create a folder, for instance, "Rao2014", and put the cooler file in the new folder. After that, run `cooler balance` to perform ICE normalization. Remember to use the -p parameter to specify the core number used. For example,
+```
+cooler balance --ignore-diags 0 -p 64 --max-iters 500 -f rep1_5000.cool
+```
+
+- **Step3:** We assume that at this step, your data is stored in `example/Rao2014/`, and your Python scripts are located in `example/topohic/`. Now, navigate back to the script directory and open `run1.py`. You might want to modify the following values in the script:
+```
+parent_dir = "../Rao2014/"
+exp_list = ['rep1']
+chrom_list = ['22']
+threads = 64
+```
+
+The `parent_dir` is the folder in which you store your data. The `exp_list` contains the labels of your datasets. The `chrom_list` contains the chromosomes on which you wish to apply the pipeline. The `threads` parameter specifies the number of CPU cores the pipeline will use. After that, run `python3 run1.py`. The pipeline will compute H1 loops and compute loop scores. By default, it will create a new folder in `example/Rao2014/topohic/` to store all the results. 
+
+You can find the computed loops in `example/Rao2014/topohic/rep1/topohic-22/rep1-sc4/scratch.txt`. To process the result file, we provide a Python script named `topohicMultiple.py`. Through straightforward text processing, it converts the results in `scratch.txt`​ into a structured format for easier reading and analysis. This script will convert the genomic bins to chromosome coordinates; therefore it requires a reference file named as `binchr5.txt` which can be obtained through 
+```
+cooler dump --header -t bins rep1-5kb.cool > binchr5.txt
+```
+The processed results will be output to a folder named `topohicMultiple​` in the same directory as the script itself by default. Please ensure this folder is created. The code is relatively simple, users can easily customize the input and output settings as needed. (Please refer to [Dory](https://github.com/nihcompmed/Dory) and its original paper for detailed explanation of the results of persistent homology)
+
+- **Step4:** If the chromatin loop is all you want, then you may stop here. Since we here only have one replicate, we set `pair_wise=False` in the `domain.py` to extract TADs through individual approach. You may want to modify the following values in `domain.py` as we did before in the previous step:
+```
+parent_dir = "../Rao2014/"
+exp_list = ['rep1']
+chrom_list = ['22']
+```
+
+After that, run `python3 domain.py`. The computed TADs are in `example/Rao2014/topohic/rep1/topohic-22/rep1-sc4/domain.csv`. The output CSV file contains five columns. **Note that the last two columns correspond to features that are currently under development and not yet complete; please ignore and do not use them.**
 
 ## Help
 
