@@ -1,4 +1,4 @@
-TopoHiC is a computational tool for Hi-C analysis. It enables simultaneous identification of chromatin loops and topologically associating domains (TADs).
+TopoHiC is a computational tool for Hi-C analysis. It enables simultaneous identification of chromatin loops and topologically associating domains (TADs). Please note that this pipeline has currently only been validated on human cell lines. For data from other species, we plan to conduct testing and adjustments in future versions. However, if the data share the same resolution (e.g., 5 kb or 10 kb) and are normalized using the same ICE matrix, we believe the pipeline can be applied directly without parameter modifications.
 
 ## Download
 
