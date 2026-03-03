@@ -25,7 +25,7 @@ if pair_merge:
         start_time = time.time()
         exp1 = exp_comb[0]
         exp2 = exp_comb[1]
-        exp_example = cooler.Cooler(parent_dir + exp1 + "-5kb.cool")
+        exp_example = cooler.Cooler(parent_dir + exp1 + "_" + str(resolution) + ".cool")
         for chrom in chrom_list:
             cooler_ext = exp_example.extent(chrom)
             bin_range = list(cooler_ext)
@@ -52,7 +52,7 @@ else:
     print("==================  CURRENT PROCESS  ==================")
     for exp_name in exp_list:
         start_time = time.time()
-        exp_cooler = cooler.Cooler(parent_dir + exp_name + "-5kb.cool")
+        exp_cooler = cooler.Cooler(parent_dir + exp_name + "_" + str(resolution) + ".cool")
         for chrom in chrom_list:
             cooler_ext = exp_cooler.extent(chrom)
             bin_range = list(cooler_ext)

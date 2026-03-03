@@ -34,7 +34,7 @@ for exp_name in exp_list:
 
     for chrom in chrom_list:
 
-        cool_file = parent_dir + exp_name + "-5kb.cool"
+        cool_file = parent_dir + exp_name + "_" + str(resolution) + ".cool"
         output_path = parent_dir + "topohic/" + exp_name + "/topohic-" + chrom + "/"
 
         cooler_obj = cooler.Cooler(cool_file)
